@@ -1,0 +1,48 @@
+plugins {
+	id 'java-library'
+	id 'maven-publish'
+	id 'application'
+	id "com.github.johnrengelman.shadow" version "5.0.0"
+	id 'eclipse'
+	id 'idea'
+}
+
+mainClassName = "morlok8k.MinecraftLandGenerator.MinecraftLandGenerator"
+group = 'groupId'
+version = '2.0.0'
+sourceCompatibility = '1.8'
+
+repositories {
+	mavenCentral()
+	maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+	api 'commons-logging:commons-logging:1.2'
+	implementation 'org.apache.logging.log4j:log4j-core:2.11.1'
+	implementation 'org.apache.logging.log4j:log4j-jcl:2.11.1'
+	api 'org.joml:joml-jdk8:1.9.14'
+	api 'info.picocli:picocli:3.7.0'
+	implementation 'com.github.piegamesde:nbt:dbe4ea253b'
+	testCompile 'junit:junit:4.12'
+}
+
+jar {
+	manifest {
+		attributes 'Implementation-Title': 'MinecraftLandGenerator',
+		'Main-Class': 'morlok8k.MinecraftLandGenerator.MinecraftLandGenerator'
+	}
+}
+
+
+publishing {
+	publications {
+		maven(MavenPublication) {
+			from(components.java)
+		}
+	}
+}
+
+// Hide tasks
+shadowJar.group = null
+knows.group = null

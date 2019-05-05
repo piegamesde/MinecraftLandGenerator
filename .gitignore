@@ -1,4 +1,5 @@
-*.class
-*.backup
-*.*~
-/target/
+target/
+.gradle/
+build/
+bin/
+.gradletasknamecache
