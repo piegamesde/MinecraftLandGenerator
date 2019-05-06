@@ -1,125 +1,94 @@
-Minecraft Land Generator version 1.7.6
+# Minecraft Land Generator version 1.7.6
 
-Updated January 19, 2015
-(BuildID: 1421666774000)
+Updated March 2019
 
-Original Code by Corrodias		November 2010
-Enhanced Code by Morlok8k		Feb. 2011 to Now (or at least to January 19, 2015!)
-Additional Code by pr0f1x		October 2011
-Additional Code/Idea by jaseg    August 2012
-Additional Code by Gallion       January 2015
+## Credits
+
+Original Code by Corrodias							November 2010
+Enhanced Code by Morlok8k							Feb. 2011 - Jan. 2015
+Additional Code by pr0f1x							October 2011
+Additional Code/Idea by jaseg						August 2012
+Additional Code by Gallion							January 2015
+Almost complete rewrite by piegames and sommerlile	November 2018
 
 Website: https://sites.google.com/site/minecraftlandgenerator/
 Forum: http://www.minecraftforum.net/topic/187737-
 Source: https://github.com/Morlok8k/MinecraftLandGenerator
 
------------------------------------------------
+## How it works
 
-This program lets you generate an area of land with your Minecraft SMP server (and is prossibly future-proof for newer versions). You set up your java command line and minecraft server paths in the MinecraftLandGenerator.conf file, set up the server's server.properties file with the name of the world you wish to use, and then run this program.
-When a Minecraft server is launched, it automatically generates chunks within a square area of 25x25 chunks (400x400 blocks), centered on the current spawn point (formally 20x20 chunks, 320x320 blocks). When provided X and Z ranges as arguments, this program will launch the server repeatedly, editing the level.dat file between sessions, to generate large amounts of land without players having to explore them. The generated land will have about the X and Z ranges as requested by the arguments, though it will not be exact due to the spawn point typically not on the border of a chunk. (Because of this, MLG by default adds a slight overlap with each pass - 380x380 blocks) You can use the -x and -z switches to override the spawn offset and center the land generation on a different point.
-The program makes a backup of level.dat as level_backup.dat before editing, and restores the backup at the end. In the event that a level_backup.dat file already exists, the program will refuse to proceed, leaving the user to determine why the level_backup.dat file exists and whether they would rather restore it or delete it, which must be done manually.
+The tool leverages Minecraft server functionality to generate chunks in a given world. To do this, it changes or fakes some data in that world to make the server behave as intended. This means on the one hand that a `server.jar` is required and must be optained separately. On the other hand, this makes MinecraftLandGenerator compatible with almost all Minecraft versions. There are different operation modes that use different techniques to generate the chunks:
 
-This program is free, and the source code is included in the .jar file.  (If accidently missing, like in 1.3.0 and 1.4.0, it is always available at Github.)
+### Spawnpoint-based generation
 
-Copyright © 2010
-This work is free. You can redistribute it and/or modify it under the terms of the Do What The Fuck You Want To Public License, Version 2, as published by Sam Hocevar. See http://www.wtfpl.net/ for more details.
+Minecraft has the useful property, that an area of 25×25 chunks (value changed a bit over the course of versions) around the world's spawn is always loaded, and generated if necessary. By moving the spawnpoint accordingly and repeatedly starting the server on that world, it can be used to generate a desired area of the world. In the `manual-spawnpoints` mode, specify a list of spawn coordinates and the server will be started on each one, generating the surrounding area. In the `auto-spawnpoints` mode, specify a region you want to have generated and the minimal required set of spawnpoints will be calculated automatically.
 
-The JNBT library is included (inside the .jar). It is not public domain. Its license is included, as LICENSE.TXT.
-It is also available at: http://jnbt.sourceforge.net/ (Original) and at: https://github.com/Morlok8k/JNBT (Current)
+### Chunk-based generation
 
-The "unescape" method/function is also not Public Domain.  Its License is the W3C© Software License, and located here: http://www.w3.org/Consortium/Legal/2002/copyright-software-20021231
-Other Public Domain code has been used in this program, and references to sources are included in the comments of Minecraft Land Generator's source code.
------------------------------------------------
+Since a few versions, Minecraft has the concept of force-loaded chunks. These are chunk that are always loaded by the server. While this was originally meant to be used for farms or other regions of interest, this too has the property that missing chunks will be generated. The `auto-spawnpoints` uses this by writing a list of chunks to be force-loaded into the world and then starting the server.
 
-Usage: java -jar MinecraftLandGenerator.jar x z [serverpath] [switches]
+Since more chunks can be generated per server start (tens of thousands instead of 25×25=625), this is significantly faster. On the other hand, this requires much more RAM. If you are running out of memory, or the system starts swapping and slowing down, reduce the maximal number of force-loaded chunks per server start.
 
-Arguments:
-              x : X range to generate
-              z : Z range to generate
-     serverpath : the path to the directory in which the server runs (takes precedence over the config file setting)
+Other advantages of chunk-based control over generation are that 1) it allows to be lazy: If enabled, the world will be scanned for existing chunks first and those will be skipped, making it significantly faster if parts of the world already exist. 2) It allows to generate data in all dimensions, not only the overworld.
 
-Switches:
-       -verbose : causes the application to output the server's messages to the console
-             -v : same as -verbose
-             -w : Ignore [WARNING] and [SEVERE] messages.
-           -alt : alternate server launch sequence
-             -a : same as -alt
-        -nowait : don't pause for anything
-             -n : same as -nowait
-            -i# : override the iteration spawn offset increment (default 380) (example: -i100)
-            -x# : set the X offset to generate land around (example: -x0 or -x1000 or -x-500)
-            -z# : set the Z offset to generate land around (example: -z0 or -z1000 or -z-500)
+### Backup files
 
-Other options:
-  java -jar MinecraftLandGenerator.jar -update
-        Checks for and downloads new versions of MLG online.
+The program makes a backup of level.dat and other files it manipulates before editing, and restores the backup at the end. In the event that a backup file already exists, the program will refuse to proceed, leaving the user to determine why it ile exists and whether they would rather restore it or delete it, which must be done manually.
 
-  java -jar MinecraftLandGenerator.jar -printspawn
-  java -jar MinecraftLandGenerator.jar -ps
-        Outputs the current world's spawn point coordinates.
+## Command-line usage
 
-  java -jar MinecraftLandGenerator.jar -conf
-  java -jar MinecraftLandGenerator.jar -conf download
-        Generates or downloads a MinecraftLandGenerator.conf file.
+To show the global options and the available subcommands, use
 
-  java -jar MinecraftLandGenerator.jar -readme readme.txt
-  java -jar MinecraftLandGenerator.jar -readme
-        Generates a readme file using supplied name or the default _MLG_Readme.txt
+	java -jar MinecraftLandGenerator.jar help
 
-  java -jar MinecraftLandGenerator.jar -downloadfile http://example.com/file.txt
-        Downloads whatever file from the internet you give it.
-  java -jar MinecraftLandGenerator.jar -downloadlist list.txt
-        list.txt (or any other file) contains a URL on each line which will be downloaded.
+Currently there are three subcommands acting as operation modes, `auto-spawnpoints`, `manual-spawnpoints` and `forceload-chunks`
 
-  java -jar MinecraftLandGenerator.jar -version
-  java -jar MinecraftLandGenerator.jar -help
-  java -jar MinecraftLandGenerator.jar /?
-        Prints this message.
+	java -jar MinecraftLandGenerator.jar help auto-spawnpoints
+	java -jar MinecraftLandGenerator.jar help manual-spawnpoints
+	java -jar MinecraftLandGenerator.jar help forceload-chunks
 
-When launched with the -conf switch, this application creates a MinecraftLandGenerator.conf file that contains configuration options.
-If this file does not exist or does not contain all required properties, the application will not run.
+will tell you more about their specific options. On newer versions, `forceload-chunks` is the recommended way to use.
 
-MinecraftLandGenerator.conf properties:
-           Java : The command line to use to launch the server
-     ServerPath : The path to the directory in which the server runs (can be overridden by the serverpath argument)
-      Done_Text : The output from the server that tells us that we are done
- Preparing_Text : The output from the server that tells us the percentage
-Preparing_Level : The output from the server that tells us the level it is working on
-        Level-0 : Name of Level 0: The Overworld
-        Level-1 : Name of Level 1: The Nether
-        Level-2 : Name of Level 2: The End
-        Level-3 : Name of Level 3: (Future Level)
-        Level-4 : Name of Level 4: (Future Level)
-        Level-5 : Name of Level 5: (Future Level)
-        Level-6 : Name of Level 6: (Future Level)
-        Level-7 : Name of Level 7: (Future Level)
-        Level-8 : Name of Level 8: (Future Level)
-        Level-9 : Name of Level 9: (Future Level)
-       WaitSave : Optional: Wait before saving.
+## Library usage
 
------------------------------------------------
+TODO dependency/installation
 
-Version History:
-Morlok8k:
-1.7.6
+The class `MinecraftLandGenerator` contains the command-line functionality, which may be used from code as well. It also provides the `manualSpawnpoints` and `forceloadChunks` methods that are used by the command-line internally for direct use. This is all you are going to need almost every time, otherwise have a look at the documented code (it really is not that much).
+
+## Changelog
+
+2.0.0 (piegames/sommerlilie)
+- Complete rewrite of the core logic
+- New command-line interface
+- Removed compatibility for older Minecraft versions
+- Faster world generation using force-loading of chunks (optional)
+- Removed a lot of bloat and unused stuff
+
+1.7.6 (Morlok8k)
 - Gallion: fixed null world name (minor bug) 
 - Morlok8k: fixed elua bug
+
 1.7.5
 - Added "save-all" to alternate mode 
 - Added fix for new style of java error messages
+
 1.7.4
 - Released Minecraft land Generator under the WTFPL.  (With the permission of Corrodias)
+
 1.7.3
 - Fixed a minor display bug (specifically when using Server Generation Fix Mod)
 - Updated Readme text a bit.
+
 1.7.2
 - Fixed "1152 bug"
 - Updated to JNBT 1.3
 - adjusted archive integrity check to account for timezone-related bugs...
+
 1.7.1
 - Major Code Refactoring
 - Updated to JNBT 1.2
 - making code ready for a GUI
+
 1.7.0
 - Major Code Optimization
 - Drastically reduced the amount of time it takes for MLG to expand a world after it has already done so before!
@@ -129,11 +98,13 @@ Morlok8k:
 - Made xx% output nicer by rewriting previous existing line.
 - Misc. Tweaks
 - Misc. Additions
+
 1.6.3
 - Minor Code Optimization
 - Finely got on the ball and added the JNBT source and everything (as an internal .zip) to be completely faithful to his license
 - Also adding script files internally in the .jar for archive (or offline) purposes. (Manual Extract needed for use)
 - Modified output of MLG slightly to show whats the server and whats MLG. (I may do more with this later.)
+
 1.6.2
 - Major Code Optimization
 - Updated Time Output again.  Now says "1 Minute" instead of "1 Minutes".
@@ -165,6 +136,7 @@ Morlok8k:
 
 1.6.02
 - small fix on caculating md5sum where old version didnt pad out to 32chars with zeros on the left side- quick Archive intergity fix after injecting source code into .jar after it compiled.- no new functionality, md5 issue doesnt affect -update on old versions.
+
 1.6.0
 - NOW DOES NOT NEED ANY SCRIPT FILES!
 - Added the ability to download files from the internet
@@ -195,12 +167,7 @@ Morlok8k:
 - Changed the default 300 blocks to 380.  The server now makes a 400x400 square block terrain instead of 320x320.  Thus it is faster because there are less loops.  To use the old way, use "-i300"
 - Added total Percentage done (technically, it displays the % done once the server finishes...)
 - Added debugging output vars of conf file (disabled - need to re-compile source to activate)
-
-		+ (the goal is to have MLG be configureable, so it can work on any version of the server, past or present.)
-
-*** 1.4.5 (pre 1.5.0) ***
-- sorry!  I shouldn't release untested code...
-*************************
+- (the goal is to have MLG be configureable, so it can work on any version of the server, past or present.)
 
 1.4.4
 - Added ablilty to ignore [WARNING] and [SEVERE] errors with "-w"
@@ -224,10 +191,7 @@ Morlok8k:
 1.3.0
 - Fixed Problems with Minecraft Beta 1.3 -- Morlok8k
 
------------------------------------------------
-
-Corrodias:
-1.2.0
+1.2.0 (Corrodias)
 - land generation now centers on the spawn point instead of [0, 0]
 - the server is launched once before the spawn point is changed, to verify that it can run and to create a world if one doesn't exist
 - added -printspawn [-ps] switch to print the current spawn coordinates to the console
@@ -246,13 +210,3 @@ Corrodias:
 
 1.0.0
 - initial release
-
------------------------------------------------
-
-Notes:
-Due to changes in server beta 1.6, it now generates the nether as well as the world at the same time.
-However, Since beta 1.9 and Minecraft 1.0, the nether or the end is no longer generated.
-The "Server Generation Fix Mod" by Morlok8k can generate The Nether and The End.  Link: http://www.minecraftforum.net/topic/1378775-
-
-I recommend using MCEDIT to relight the map after you generate it. This will take a long time, but should fix all those incorrectly dark spots in your level.
-
