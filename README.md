@@ -1,19 +1,17 @@
 # Minecraft Land Generator version 1.7.6
 
-Updated March 2019
+Updated May 2019
 
 ## Credits
 
-Original Code by Corrodias							November 2010
-Enhanced Code by Morlok8k							Feb. 2011 - Jan. 2015
-Additional Code by pr0f1x							October 2011
-Additional Code/Idea by jaseg						August 2012
-Additional Code by Gallion							January 2015
-Almost complete rewrite by piegames and sommerlile	November 2018
+- Original Code by Corrodias — *November 2010*
+- Enhanced Code by Morlok8k — *Feb. 2011 - Jan. 2015*
+- Additional Code by pr0f1x — *October 2011*
+- Additional Code/Idea by jaseg — *August 2012*
+- Additional Code by Gallion — *January 2015*
+- Almost complete rewrite by piegames and sommerlile — *November 2018*
 
-Website: https://sites.google.com/site/minecraftlandgenerator/
-Forum: http://www.minecraftforum.net/topic/187737-
-Source: https://github.com/Morlok8k/MinecraftLandGenerator
+This is a fork of <https://github.com/Morlok8k/MinecraftLandGenerator>.
 
 ## How it works
 
@@ -65,11 +63,11 @@ The class `MinecraftLandGenerator` contains the command-line functionality, whic
 - Removed a lot of bloat and unused stuff
 
 1.7.6 (Morlok8k)
-- Gallion: fixed null world name (minor bug) 
+- Gallion: fixed null world name (minor bug)
 - Morlok8k: fixed elua bug
 
 1.7.5
-- Added "save-all" to alternate mode 
+- Added "save-all" to alternate mode
 - Added fix for new style of java error messages
 
 1.7.4
