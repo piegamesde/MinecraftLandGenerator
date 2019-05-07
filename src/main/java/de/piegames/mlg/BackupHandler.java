@@ -1,4 +1,4 @@
-package morlok8k.MinecraftLandGenerator;
+package de.piegames.mlg;
 
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;

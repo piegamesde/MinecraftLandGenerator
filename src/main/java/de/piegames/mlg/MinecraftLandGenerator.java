@@ -1,4 +1,4 @@
-package morlok8k.MinecraftLandGenerator;
+package de.piegames.mlg;
 
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
@@ -15,10 +15,10 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.config.Configurator;
 import org.joml.Vector2i;
 
-import morlok8k.MinecraftLandGenerator.MinecraftLandGenerator.AutoSpawnpoints;
-import morlok8k.MinecraftLandGenerator.MinecraftLandGenerator.ForceloadChunks;
-import morlok8k.MinecraftLandGenerator.MinecraftLandGenerator.ManualSpawnpoints;
-import morlok8k.MinecraftLandGenerator.World.Dimension;
+import de.piegames.mlg.MinecraftLandGenerator.AutoSpawnpoints;
+import de.piegames.mlg.MinecraftLandGenerator.ForceloadChunks;
+import de.piegames.mlg.MinecraftLandGenerator.ManualSpawnpoints;
+import de.piegames.mlg.World.Dimension;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Help.Visibility;

@@ -1,13 +1,13 @@
 plugins {
 	id 'java-library'
-	id 'maven-publish'
+	id 'maven'
 	id 'application'
 	id "com.github.johnrengelman.shadow" version "5.0.0"
 	id 'eclipse'
 	id 'idea'
 }
 
-mainClassName = "morlok8k.MinecraftLandGenerator.MinecraftLandGenerator"
+mainClassName = "de.piegames.mlg.MinecraftLandGenerator"
 group = 'groupId'
 version = '2.0.0'
 sourceCompatibility = '1.8'
@@ -27,22 +27,40 @@ dependencies {
 	testCompile 'junit:junit:4.12'
 }
 
+task release(type: GradleBuild) {
+	group 'Distribution'
+	tasks = ['clean', 'createPom', 'jar', 'shadowJar']
+}
+
+task createPom {
+    pom {
+        project {
+            groupId 'de.piegames'
+            artifactId 'mlg'
+            version '${version}'
+
+            licenses {
+                license {
+                    name 'CC0 Universal'
+                    url 'http://www.creativecommons.org/publicdomain/zero/1.0/'
+                    distribution 'repo'
+                }
+            }
+        }
+    }.writeTo("pom.xml")
+}
+
 jar {
 	manifest {
 		attributes 'Implementation-Title': 'MinecraftLandGenerator',
-		'Main-Class': 'morlok8k.MinecraftLandGenerator.MinecraftLandGenerator'
+		'Main-Class': 'de.piegames.mlg.MinecraftLandGenerator'
 	}
+	appendix 'lib'
 }
 
-
-publishing {
-	publications {
-		maven(MavenPublication) {
-			from(components.java)
-		}
-	}
+shadowJar {
+	classifier = ''
 }
 
-// Hide tasks
-shadowJar.group = null
+// Hide task
 knows.group = null

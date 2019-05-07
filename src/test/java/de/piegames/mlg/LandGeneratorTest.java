@@ -1,4 +1,4 @@
-package morlok8k.MinecraftLandGenerator;
+package de.piegames.mlg;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import org.joml.Vector2i;
 import org.junit.Test;
 
-import morlok8k.MinecraftLandGenerator.World;
+import de.piegames.mlg.World;
 
 public class LandGeneratorTest {
 

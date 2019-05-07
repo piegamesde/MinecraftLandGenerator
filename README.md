@@ -1,4 +1,4 @@
-# Minecraft Land Generator version 1.7.6
+# Minecraft Land Generator version 2.0.0
 
 Updated May 2019
 
@@ -52,6 +52,8 @@ will tell you more about their specific options. On newer versions, `forceload-c
 TODO dependency/installation
 
 The class `MinecraftLandGenerator` contains the command-line functionality, which may be used from code as well. It also provides the `manualSpawnpoints` and `forceloadChunks` methods that are used by the command-line internally for direct use. This is all you are going to need almost every time, otherwise have a look at the documented code (it really is not that much).
+
+The class `World` has a few static utility methods too, `generateSpawnpoints` will create a list of spawnpoints exactly covering a specific area and `availableChunks` will list all existing chunks in a world.
 
 ## Changelog
 
