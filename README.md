@@ -1,5 +1,7 @@
 # Minecraft Land Generator version 2.0.0
 
+[![](https://jitpack.io/v/Minecraft-Technik-Wiki/MinecraftLandGenerator.svg)](https://jitpack.io/#Minecraft-Technik-Wiki/MinecraftLandGenerator)
+
 Updated May 2019
 
 ## Credits
@@ -35,6 +37,8 @@ The program makes a backup of level.dat and other files it manipulates before ed
 
 ## Command-line usage
 
+**Download the latest release [here](https://github.com/Minecraft-Technik-Wiki/MinecraftLandGenerator/releases).**
+
 To show the global options and the available subcommands, use
 
 	java -jar MinecraftLandGenerator.jar help
@@ -49,7 +53,13 @@ will tell you more about their specific options. On newer versions, `forceload-c
 
 ## Library usage
 
-TODO dependency/installation
+If you know JitPack and use gradle:
+
+	dependencies {
+		implementation 'com.github.Minecraft-Technik-Wiki:MinecraftLandGenerator:2.0.0'
+	}
+
+otherwise, grab the latest release [here](https://jitpack.io/#Minecraft-Technik-Wiki/MinecraftLandGenerator).
 
 The class `MinecraftLandGenerator` contains the command-line functionality, which may be used from code as well. It also provides the `manualSpawnpoints` and `forceloadChunks` methods that are used by the command-line internally for direct use. This is all you are going to need almost every time, otherwise have a look at the documented code (it really is not that much).
 
