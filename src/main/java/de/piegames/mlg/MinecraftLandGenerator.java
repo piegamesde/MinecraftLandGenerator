@@ -32,80 +32,81 @@ import picocli.CommandLine.RunAll;
 
 /** @author piegames, sommerlilie */
 @Command(name = "MinecraftLandGenerator",
-		subcommands = { HelpCommand.class, ManualSpawnpoints.class, AutoSpawnpoints.class,
-				ForceloadChunks.class },
+		subcommands = { HelpCommand.class, ManualSpawnpoints.class, AutoSpawnpoints.class, ForceloadChunks.class },
 		description = "Generate Minecraft worlds by tricking the server to do it for you. You need to provide a server jar file for this to work.")
 public class MinecraftLandGenerator implements Runnable {
 
-	private static Log log = LogFactory.getLog(MinecraftLandGenerator.class);
+	private static Log	log			= LogFactory.getLog(MinecraftLandGenerator.class);
 
 	@Option(names = { "-v", "--verbose" }, description = "Be verbose.")
-	private boolean verbose = false;
+	private boolean		verbose		= false;
 
 	@Option(names = { "--debug-server" },
 			description = "Print the Minecraft server log to stdout for debugging")
-	private boolean debugServer = false;
+	private boolean		debugServer	= false;
 
-	@Option(names = { "-s", "--serverFile" }, description = "Path to the server's jar file.",
-			required = true, defaultValue = "server.jar", showDefaultValue = Visibility.ALWAYS)
-	private Path serverFile;
+	@Option(names = { "-s", "--serverFile" },
+			description = "Path to the server's jar file.",
+			required = true,
+			defaultValue = "server.jar",
+			showDefaultValue = Visibility.ALWAYS)
+	private Path		serverFile;
 
 	@Option(names = { "-w", "--worldPath" },
-			description = "Path to the world that should be generated. Defaults to the value in server.properties")
-	private Path worldPath;
+			description = "Path to the world that should be generated. Defaults to the value in server.properties. Omit to let the server create one.")
+	private Path		worldPath;
 
 	@Option(names = { "--java-cmd" },
 			description = "Java command to launch the server. Defaults to [java, -jar]. Use this to specify JVM options (like more RAM etc.) or to enforce the usage of a specific java version.")
-	private String[] javaOpts;
+	private String[]	javaOpts;
 
 	@Override
 	public void run() {
-		if (verbose) {
+		if (verbose)
 			Configurator.setRootLevel(Level.DEBUG);
-		}
 	}
 
 	/**
 	 * Mixin that provides positional arguments describing a rectangle.
-	 * 
+	 *
 	 * @see Mixin
 	 * @author piegames
 	 */
 	protected static class RectangleMixin {
-		@Parameters(index = "0", paramLabel = "START_X",
+		@Parameters(index = "0",
+				paramLabel = "START_X",
 				description = "X-coordinate of the first chunk to be generated (in chunk coordinates)")
-		int x;
-		@Parameters(index = "1", paramLabel = "START_Z",
+		int	x;
+		@Parameters(index = "1",
+				paramLabel = "START_Z",
 				description = "Z-coordinate of the first chunk to be generated (in chunk coordinates)")
-		int z;
-		@Parameters(index = "2", paramLabel = "WIDTH",
+		int	z;
+		@Parameters(index = "2",
+				paramLabel = "WIDTH",
 				description = "Amount of chunks to generate from the starting chunk to the east")
-		int w;
-		@Parameters(index = "3", paramLabel = "HEIGHT",
+		int	w;
+		@Parameters(index = "3",
+				paramLabel = "HEIGHT",
 				description = "Amount of chunks to generate from the starting chunk to the south")
-		int h;
+		int	h;
 	}
 
 	protected static abstract class CommandLineHelper implements Runnable {
 		@ParentCommand
-		protected MinecraftLandGenerator parent;
+		protected MinecraftLandGenerator	parent;
 
-		protected Server server;
-		protected World world;
+		protected Server					server;
+		protected World						world;
 
 		@Override
 		public final void run() {
 			try {
 				server = new Server(parent.serverFile, parent.javaOpts);
 			} catch (FileAlreadyExistsException e1) {
-				log.fatal(
-						"Server backup file already exists. Please delete or restore it and then start again",
-						e1);
+				log.fatal("Server backup file already exists. Please delete or restore it and then start again", e1);
 				return;
 			} catch (NoSuchFileException e1) {
-				log.fatal(
-						"Server file does not exist. Please download the minecraft server and provide the path to it",
-						e1);
+				log.fatal("Server file does not exist. Please download the minecraft server and provide the path to it", e1);
 				return;
 			}
 			try {
@@ -122,9 +123,7 @@ public class MinecraftLandGenerator implements Runnable {
 				world.resetChanges();
 				server.resetChanges();
 			} catch (IOException e) {
-				log.warn(
-						"Could not delete backup files (server.properties.bak and level.dat.bak). Please delete them manually",
-						e);
+				log.warn("Could not delete backup files (server.properties.bak and level.dat.bak). Please delete them manually", e);
 			}
 			log.info("Done.");
 		}
@@ -138,18 +137,18 @@ public class MinecraftLandGenerator implements Runnable {
 	public static class AutoSpawnpoints extends CommandLineHelper {
 
 		@Mixin
-		private RectangleMixin bounds;
+		private RectangleMixin	bounds;
 
 		@Option(names = "-i",
 				description = "Maximum number of chunks between two spawn points, horizontally or vertically. Since Minecraft by default generates 25 chunks around each spawn point, this should be 25 for most servers. This value should be unpair.",
-				defaultValue = "25", showDefaultValue = CommandLine.Help.Visibility.ALWAYS,
+				defaultValue = "25",
+				showDefaultValue = CommandLine.Help.Visibility.ALWAYS,
 				hidden = false)
-		private int increment = 25;
+		private int				increment	= 25;
 
 		@Override
 		public void runGenerate() {
-			List<Vector2i> spawnpoints =
-					World.generateSpawnpoints(bounds.x, bounds.z, bounds.w, bounds.h, increment);
+			List<Vector2i> spawnpoints = World.generateSpawnpoints(bounds.x, bounds.z, bounds.w, bounds.h, increment);
 			manualSpawnpoints(server, world, spawnpoints, parent.debugServer);
 		}
 
@@ -159,7 +158,8 @@ public class MinecraftLandGenerator implements Runnable {
 			description = "Provide a list of spawnpoints and a Minecraft server will be started on each one to generate the chunks around it.")
 	public static class ManualSpawnpoints extends CommandLineHelper {
 
-		@Parameters(index = "0..*", paramLabel = "SPAWNPOINTS",
+		@Parameters(index = "0..*",
+				paramLabel = "SPAWNPOINTS",
 				description = "Provide a lsit of spawnpoints. All chunks in a 25x25 area aroud each spawn point will be generated. Usage: x1,y1 x2,y2 x3,y3 ...")
 		private Vector2i[] spawnpoints;
 
@@ -173,21 +173,24 @@ public class MinecraftLandGenerator implements Runnable {
 			description = "Force the chunks in a given rectangular area to be permanently loaded. If the do not exist, the server will conveniently generate them for us.")
 	public static class ForceloadChunks extends CommandLineHelper {
 		@Mixin
-		private RectangleMixin bounds;
+		private RectangleMixin	bounds;
 
-		@Option(names = "--dimension", description = "The dimension to generate the chunks in.",
-				defaultValue = "OVERWORLD", showDefaultValue = Visibility.ALWAYS)
-		private Dimension dimension;
+		@Option(names = "--dimension",
+				description = "The dimension to generate the chunks in.",
+				defaultValue = "OVERWORLD",
+				showDefaultValue = Visibility.ALWAYS)
+		private Dimension		dimension;
 
-		@Option(names = "--max-loaded", defaultValue = "16384",
+		@Option(names = "--max-loaded",
+				defaultValue = "16384",
 				showDefaultValue = Visibility.ALWAYS,
 				description = "The maximum amount of chunks to force-load at once. Increasing this number will result in more RAM consumption and thus "
 						+ "in slower generation. Smaller values will result in starting the server more often, which has some overhead and takes time. "
 						+ "Set this as high as possible without totally filling up your RAM.")
-		private int maxLoaded;
+		private int				maxLoaded;
 		@Option(names = { "--lazy", "-l" },
 				description = "Scan the world for existing chunks and skip them.")
-		private boolean lazy;
+		private boolean			lazy;
 
 		@Override
 		protected void runGenerate() {
@@ -195,15 +198,13 @@ public class MinecraftLandGenerator implements Runnable {
 			for (int x = bounds.x; x < bounds.x + bounds.w; x++)
 				for (int z = bounds.z; z < bounds.z + bounds.h; z++)
 					loadedChunks.add(new Vector2i(x, z));
-			forceloadChunks(server, world, loadedChunks, dimension, lazy, maxLoaded,
-					parent.debugServer);
+			forceloadChunks(server, world, loadedChunks, dimension, lazy, maxLoaded, parent.debugServer);
 		}
 	}
 
 	/**
-	 * Internal method of the "auto-spawnpoints" and "manual-spawnpoints" commands, exposed to remove boilerplate code in similar use cases. It will not throw any exceptions on failure and instead log
-	 * them together with
-	 * debug information.
+	 * Internal method of the "auto-spawnpoints" and "manual-spawnpoints" commands, exposed to remove boilerplate code in similar use cases.
+	 * It will not throw any exceptions on failure and instead log them together with debug information.
 	 */
 	public static void manualSpawnpoints(Server server, World world, List<Vector2i> spawnpoints,
 			boolean debugServer) {
@@ -212,20 +213,18 @@ public class MinecraftLandGenerator implements Runnable {
 		for (int i = 0; i < spawnpoints.size(); i++) {
 			Vector2i spawn = spawnpoints.get(i);
 			try {
-				log.info("Processing " + (i + 1) + "/" + spawnpoints.size() + ", spawn point "
-						+ spawn);
+				log.info("Processing " + (i + 1) + "/" + spawnpoints.size() + ", spawn point " + spawn);
 				world.setSpawn(spawn);
 				server.runMinecraft(debugServer);
 			} catch (IOException | InterruptedException e) {
-				log.warn("Could not process spawn point " + spawn
-						+ " this part of the world won't be generated", e);
+				log.warn("Could not process spawn point " + spawn + " this part of the world won't be generated", e);
 			}
 		}
 	}
 
 	/**
-	 * Internal method of the "forceload-chunks" command, exposed to remove boilerplate code in similar use cases. It will not throw any exceptions on failure and instead log them together with
-	 * debug information.
+	 * Internal method of the "forceload-chunks" command, exposed to remove boilerplate code in similar use cases. It will not throw any
+	 * exceptions on failure and instead log them together with debug information.
 	 */
 	public static void forceloadChunks(Server server, World world, List<Vector2i> loadedChunks,
 			Dimension dimension, boolean lazy, int maxLoaded, boolean debugServer) {
@@ -239,7 +238,7 @@ public class MinecraftLandGenerator implements Runnable {
 			loadedChunks.removeAll(loadedChunks.stream().map(v -> new Vector2i(v.x >> 5, v.y >> 5))
 					.distinct().parallel()
 					.flatMap(v -> world.availableChunks(v, dimension)
-							.map(w -> new Vector2i((v.x << 5) | w.x, (v.y << 5) | w.y)))
+							.map(w -> new Vector2i(v.x << 5 | w.x, v.y << 5 | w.y)))
 					.collect(Collectors.toSet()));
 			log.debug(
 					"Removed " + (size - loadedChunks.size()) + " chunks that are already present");
@@ -247,13 +246,12 @@ public class MinecraftLandGenerator implements Runnable {
 		log.info("Generating world");
 		if (loadedChunks.size() < 5000)
 			log.debug(loadedChunks.size() + " chunks to generate: " + loadedChunks);
-		else log.debug(loadedChunks.size() + " chunks to generate");
+		else
+			log.debug(loadedChunks.size() + " chunks to generate");
 		int stepCount = (int) Math.ceil((double) loadedChunks.size() / maxLoaded);
 		for (int i = 0; i < stepCount; i++) {
-			List<Vector2i> batch = loadedChunks.subList(i * maxLoaded,
-					Math.min((i + 1) * maxLoaded, loadedChunks.size()));
-			log.info("Generating batch " + (i + 1) + " / " + stepCount + " with " + batch.size()
-					+ " chunks");
+			List<Vector2i> batch = loadedChunks.subList(i * maxLoaded, Math.min((i + 1) * maxLoaded, loadedChunks.size()));
+			log.info("Generating batch " + (i + 1) + " / " + stepCount + " with " + batch.size() + " chunks");
 			try {
 				world.setLoadedChunks(batch, dimension);
 				server.runMinecraft(debugServer);
@@ -273,8 +271,8 @@ public class MinecraftLandGenerator implements Runnable {
 			@Override
 			public Vector2i convert(String value) throws Exception {
 				String[] dims = value.split(",");
-				if (dims.length != 2) throw new IllegalArgumentException(
-						"Input must have two values for the two dimensions");
+				if (dims.length != 2)
+					throw new IllegalArgumentException("Input must have two values for the two dimensions");
 				return new Vector2i(Integer.valueOf(dims[0]), Integer.valueOf(dims[1]));
 			}
 		});

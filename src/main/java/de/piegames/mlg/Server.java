@@ -20,7 +20,7 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * Start and manipulate a Minecraft server.
- * 
+ *
  * @author morlok8k, piegames
  */
 public class Server {
@@ -43,15 +43,13 @@ public class Server {
 	 * @throws NoSuchFileException
 	 *             if the server jar file does not exist
 	 */
-	public Server(Path serverFile, String[] javaOpts)
-			throws FileAlreadyExistsException, NoSuchFileException {
+	public Server(Path serverFile, String[] javaOpts) throws FileAlreadyExistsException, NoSuchFileException {
 		if (!Files.exists(serverFile))
 			throw new NoSuchFileException(serverFile.toString());
 		workDir = serverFile.getParent();
 		serverProperties = new BackupHandler(workDir.resolve("server.properties"));
 
-		List<String> opts = new ArrayList<>(
-				Arrays.asList(javaOpts != null ? javaOpts : new String[] { "java", "-jar" }));
+		List<String> opts = new ArrayList<>(Arrays.asList(javaOpts != null ? javaOpts : new String[] { "java", "-jar" }));
 		opts.add(serverFile.toString());
 		opts.add("nogui");
 		builder = new ProcessBuilder(opts);
@@ -68,7 +66,7 @@ public class Server {
 	 * generate a new world and use its path</li>
 	 * <li>If there is still no valid path pointing to an existing folder, throw an {@link NoSuchFileException}</li>
 	 * </ul>
-	 * 
+	 *
 	 * @param worldPath
 	 *            the path to the world to generate. Should be relative to the server's folder (because the server can't handle absolute
 	 *            paths). May be {@code null}.
@@ -78,16 +76,14 @@ public class Server {
 	 * @return A {@link World} object representing the world that will be loaded from the server by {@link #runMinecraft(boolean)}
 	 * @author piegames
 	 */
-	public World initWorld(Path worldPath, boolean debugServer)
-			throws IOException, InterruptedException {
+	public World initWorld(Path worldPath, boolean debugServer) throws IOException, InterruptedException {
 		if (worldPath != null) {
 			setWorld(worldPath);
 			worldPath = workDir.resolve(worldPath);
 		} else
 			worldPath = getWorld();
 		if (worldPath == null || !Files.exists(worldPath)) {
-			log.warn(
-					"No world was specified or the world at the given path does not exist. Starting the server once to create one...");
+			log.warn("No world was specified or the world at the given path does not exist. Starting the server once to create one...");
 			log.debug("The path is " + worldPath + " | " + worldPath.toAbsolutePath());
 			runMinecraft(debugServer);
 			worldPath = getWorld();
@@ -102,14 +98,14 @@ public class Server {
 
 	/**
 	 * Set the world's path in the server.properties, creating it if it does not exist yet.
-	 * 
+	 *
 	 * @author piegames
 	 */
 	public void setWorld(Path worldPath) throws IOException {
 		Path propsFile = workDir.resolve("server.properties");
-		if (!Files.exists(propsFile)) {
+		if (!Files.exists(propsFile))
 			Files.write(propsFile, "level-name=".concat(worldPath.toString()).getBytes());
-		} else {
+		else {
 			serverProperties.backup();
 
 			Properties props = new Properties();
@@ -122,7 +118,7 @@ public class Server {
 	/**
 	 * Retrieve the world currently specified in the {@code server.properties} file. Returns {@code null} if the file does not exist or if
 	 * the world is not specified in the file. The returned path will be made absolute by resolving it against the server folder.
-	 * 
+	 *
 	 * @author piegames
 	 */
 	public Path getWorld() throws IOException {
@@ -148,7 +144,7 @@ public class Server {
 	/**
 	 * Start the Minecraft server using the current settings, wait until it finished loading the world and stop it. Communication with the
 	 * server is done via standard IO streams and commands.
-	 * 
+	 *
 	 * @param debugServer
 	 *            if set to true, all output from the server will be redirected to {@link System#out} for debugging purposes.
 	 * @throws IOException
@@ -158,8 +154,8 @@ public class Server {
 	 */
 	public void runMinecraft(boolean debugServer) throws IOException, InterruptedException {
 		log.debug("Setting EULA");
-		Files.write(workDir.resolve("eula.txt"), "eula=true".getBytes(), StandardOpenOption.CREATE,
-				StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE);
+		Files.write(workDir.resolve("eula.txt"), "eula=true".getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING,
+				StandardOpenOption.WRITE);
 		log.info("Starting server");
 		final Process process = builder.start();
 
