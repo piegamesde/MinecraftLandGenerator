@@ -1,8 +1,6 @@
 package de.piegames.mlg;
 
 import java.io.IOException;
-import java.nio.file.FileAlreadyExistsException;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,11 +51,11 @@ public class MinecraftLandGenerator implements Runnable {
 	private Path		serverFile;
 
 	@Option(names = { "-w", "--worldPath" },
-			description = "Path to the world that should be generated. Defaults to the value in server.properties. Omit to let the server create one.")
+			description = "Path to the world that should be generated. If it does not exist, a new world will be created with default settings.")
 	private Path		worldPath;
 
 	@Option(names = { "--java-cmd" },
-			description = "Java command to launch the server. Defaults to [java, -jar]. Use this to specify JVM options (like more RAM etc.) or to enforce the usage of a specific java version.")
+			description = "Java command to launch the server. Defaults to [java, -jar, server.jar]. Use this to specify JVM options (like more RAM etc.) or to enforce the usage of a specific java version.")
 	private String[]	javaOpts;
 
 	@Override
@@ -102,11 +100,8 @@ public class MinecraftLandGenerator implements Runnable {
 		public final void run() {
 			try {
 				server = new Server(parent.serverFile, parent.javaOpts);
-			} catch (FileAlreadyExistsException e1) {
-				log.fatal("Server backup file already exists. Please delete or restore it and then start again", e1);
-				return;
-			} catch (NoSuchFileException e1) {
-				log.fatal("Server file does not exist. Please download the minecraft server and provide the path to it", e1);
+			} catch (IOException e) {
+				log.fatal("Could not initialize server", e);
 				return;
 			}
 			try {
@@ -121,9 +116,8 @@ public class MinecraftLandGenerator implements Runnable {
 			log.info("Cleaning up temporary files");
 			try {
 				world.resetChanges();
-				server.resetChanges();
 			} catch (IOException e) {
-				log.warn("Could not delete backup files (server.properties.bak and level.dat.bak). Please delete them manually", e);
+				log.warn("Could not delete backup files (nolevel.dat.bak). Please delete them manually", e);
 			}
 			log.info("Done.");
 		}
