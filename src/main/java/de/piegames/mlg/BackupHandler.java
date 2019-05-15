@@ -56,11 +56,13 @@ public class BackupHandler {
 	 * @author piegames
 	 */
 	public synchronized void restore() throws IOException {
-		log.debug("Restoring backup " + file + " <-- " + backup);
-		if (Files.exists(backup))
-			Files.move(backup, file, StandardCopyOption.REPLACE_EXISTING);
-		else
-			Files.deleteIfExists(file);
-		hasBackup = false;
+		if (hasBackup) {
+			log.debug("Restoring backup " + file + " <-- " + backup);
+			if (Files.exists(backup))
+				Files.move(backup, file, StandardCopyOption.REPLACE_EXISTING);
+			else
+				Files.deleteIfExists(file);
+			hasBackup = false;
+		}
 	}
 }
