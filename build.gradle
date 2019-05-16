@@ -8,8 +8,8 @@ plugins {
 }
 
 mainClassName = "de.piegames.mlg.MinecraftLandGenerator"
-group = 'groupId'
-version = '2.0.0'
+group = 'de.piegames'
+version = '3.0.0'
 sourceCompatibility = '1.8'
 
 repositories {

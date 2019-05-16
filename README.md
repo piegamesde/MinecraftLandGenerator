@@ -1,4 +1,4 @@
-# Minecraft Land Generator version 2.0.0
+# Minecraft Land Generator version 3.0.0
 
 [![](https://jitpack.io/v/Minecraft-Technik-Wiki/MinecraftLandGenerator.svg)](https://jitpack.io/#Minecraft-Technik-Wiki/MinecraftLandGenerator)
 
@@ -17,7 +17,9 @@ This is a fork of <https://github.com/Morlok8k/MinecraftLandGenerator>.
 
 ## How it works
 
-The tool leverages Minecraft server functionality to generate chunks in a given world. To do this, it changes or fakes some data in that world to make the server behave as intended. This means on the one hand that a `server.jar` is required and must be optained separately. On the other hand, this makes MinecraftLandGenerator compatible with almost all Minecraft versions. There are different operation modes that use different techniques to generate the chunks:
+The tool leverages Minecraft server functionality to generate chunks in a given world. To do this, it changes or fakes some data in that world to make the server behave as intended. This means on the one hand that a `server.jar` is required. On the other hand, this makes MinecraftLandGenerator compatible with almost all Minecraft versions. You can either specify a path to a `server.jar` you downloaded or just a version name. In the latter case, MinecraftLandGenerator will download it automatically and cache it in `$XDG_CACHE_HOME/minecraftlandgenerator`. If no version is specified, the latest release will be used.
+
+There are different operation modes that use different techniques to generate the chunks:
 
 ### Spawnpoint-based generation
 
@@ -56,7 +58,7 @@ will tell you more about their specific options. On newer versions, `forceload-c
 If you know JitPack and use gradle:
 
 	dependencies {
-		implementation 'com.github.Minecraft-Technik-Wiki:MinecraftLandGenerator:2.0.0'
+		implementation 'com.github.Minecraft-Technik-Wiki:MinecraftLandGenerator:3.0.0'
 	}
 
 otherwise, grab the latest release [here](https://jitpack.io/#Minecraft-Technik-Wiki/MinecraftLandGenerator).
@@ -66,6 +68,13 @@ The class `MinecraftLandGenerator` contains the command-line functionality, whic
 The class `World` has a few static utility methods too, `generateSpawnpoints` will create a list of spawnpoints exactly covering a specific area and `availableChunks` will list all existing chunks in a world.
 
 ## Changelog
+
+3.0.0
+- Major version bump due to backwards-incompatible changes
+- Fixed a bug that would delete part of the world (Little remainder to always make backups)
+- Changed how the server folder is handled.
+	- Now, the path to the world may be absolute.
+- Server jar files can be downloaded automatically now.
 
 2.0.0 (piegames/sommerlilie)
 - Complete rewrite of the core logic
