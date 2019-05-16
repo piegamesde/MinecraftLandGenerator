@@ -1,7 +1,9 @@
 package de.piegames.mlg;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -43,15 +45,13 @@ public class MinecraftLandGenerator implements Runnable {
 			description = "Print the Minecraft server log to stdout for debugging")
 	private boolean		debugServer	= false;
 
-	@Option(names = { "-s", "--serverFile" },
-			description = "Path to the server's jar file.",
-			required = true,
-			defaultValue = "server.jar",
-			showDefaultValue = Visibility.ALWAYS)
-	private Path		serverFile;
+	@Option(names = { "-s", "--server" },
+			description = "Name of the Minecraft version to use or path to the server's jar file. Defaults to the latest Minecraft release.")
+	private String		server;
 
 	@Option(names = { "-w", "--worldPath" },
-			description = "Path to the world that should be generated. If it does not exist, a new world will be created with default settings.")
+			description = "Path to the world that should be generated. If it does not exist, a new world will be created with default settings.",
+			required = true)
 	private Path		worldPath;
 
 	@Option(names = { "--java-cmd" },
@@ -98,8 +98,21 @@ public class MinecraftLandGenerator implements Runnable {
 
 		@Override
 		public final void run() {
+			Path serverJar = null;
+			if (parent.server != null)
+				serverJar = Paths.get(parent.server);
+			if (serverJar == null || !Files.exists(serverJar))
+				try {
+					serverJar = Downloader.getMinecraft(parent.server);
+				} catch (IOException e) {
+					if (parent.server == null)
+						log.fatal("Could not download latest Minecraft version", e);
+					else
+						log.fatal("Could not download Minecraft version " + parent.server, e);
+					return;
+				}
 			try {
-				server = new Server(parent.serverFile, parent.javaOpts);
+				server = new Server(serverJar, parent.javaOpts);
 			} catch (IOException e) {
 				log.fatal("Could not initialize server", e);
 				return;
@@ -123,7 +136,6 @@ public class MinecraftLandGenerator implements Runnable {
 		}
 
 		protected abstract void runGenerate();
-
 	}
 
 	@Command(name = "auto-spawnpoints",
