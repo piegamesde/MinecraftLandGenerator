@@ -18,7 +18,7 @@ import org.apache.commons.logging.LogFactory;
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 
-import io.github.soc.directories.BaseDirectories;
+import io.github.soc.directories.ProjectDirectories;
 
 public class Downloader {
 
@@ -28,14 +28,14 @@ public class Downloader {
 
 	/**
 	 * Get a {@code server.jar} file for a given Minecraft version, automatically downloading it if needed, and caching the result for
-	 * future use. The cache folder will be used according to {@link BaseDirectories#cacheDir}. No integrity checks are made. No sanity
+	 * future use. The cache folder will be used according to {@link ProjectDirectories#cacheDir}. No integrity checks are made. No sanity
 	 * checks are made on the cache folder (don't touch it!).
 	 * 
 	 * @param versionName
 	 *            The desired version id. The latest release will be fetched on a {@code null} value.
 	 */
 	public static Path getMinecraft(String versionName) throws IOException {
-		Path cache = Paths.get(BaseDirectories.get().cacheDir).resolve("MinecraftLandGenerator");
+		Path cache = Paths.get(ProjectDirectories.from("de", "piegames", "MinecraftLandGenerator").cacheDir);
 		Files.createDirectories(cache);
 
 		/* URL to the JSON file describing a single version */
