@@ -11,9 +11,10 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Start and manipulate a Minecraft server.
@@ -22,7 +23,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class Server {
 
-	private static Log				log	= LogFactory.getLog(Server.class);
+	private static Logger			log	= LoggerFactory.getLogger(Server.class);
 
 	protected Path					serverDir;
 	protected final ProcessBuilder	builder;

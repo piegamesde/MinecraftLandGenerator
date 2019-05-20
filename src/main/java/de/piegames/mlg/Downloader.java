@@ -12,8 +12,8 @@ import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.Optional;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
@@ -22,7 +22,7 @@ import io.github.soc.directories.ProjectDirectories;
 
 public class Downloader {
 
-	private static Log			log				= LogFactory.getLog(Downloader.class);
+	private static Logger		log				= LoggerFactory.getLogger(Downloader.class);
 
 	private static final String	MANIFEST_URL	= "https://launchermeta.mojang.com/mc/game/version_manifest.json";
 

@@ -6,8 +6,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Helper class to back up files that shouldn't be modified and to restore them to their previous state. Backup files have the same name as
@@ -17,7 +17,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class BackupHandler {
 
-	private static Log			log	= LogFactory.getLog(BackupHandler.class);
+	private static Logger		log	= LoggerFactory.getLogger(BackupHandler.class);
 
 	public final Path			file, backup;
 	protected volatile boolean	hasBackup;

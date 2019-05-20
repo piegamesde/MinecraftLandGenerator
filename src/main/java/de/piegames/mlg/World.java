@@ -21,10 +21,10 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.joml.Vector2i;
 import org.joml.Vector3i;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.flowpowered.nbt.CompoundMap;
 import com.flowpowered.nbt.CompoundTag;
@@ -55,7 +55,7 @@ public class World {
 		}
 	}
 
-	private static Log			log	= LogFactory.getLog(World.class);
+	private static Logger		log	= LoggerFactory.getLogger(World.class);
 
 	public final Path			world;
 	protected BackupHandler		level, chunksOverworld, chunksNether, chunksEnd;

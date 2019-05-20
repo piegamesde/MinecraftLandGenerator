@@ -14,9 +14,9 @@
   </licenses>
   <dependencies>
     <dependency>
-      <groupId>commons-logging</groupId>
-      <artifactId>commons-logging</artifactId>
-      <version>1.2</version>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.7.26</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
@@ -39,7 +39,7 @@
     </dependency>
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-jcl</artifactId>
+      <artifactId>log4j-slf4j-impl</artifactId>
       <version>2.11.1</version>
       <scope>runtime</scope>
     </dependency>

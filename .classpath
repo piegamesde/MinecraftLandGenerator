@@ -20,12 +20,12 @@
 	</classpathentry>
 	<classpathentry kind="output" path="bin/default"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8/"/>
-	<classpathentry sourcepath="/home/piegames/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-jcl/2.11.1/f2a778a1d93f1b645b1022b690c3a7171fb235b4/log4j-jcl-2.11.1-sources.jar" kind="lib" path="/home/piegames/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-jcl/2.11.1/5532d26802ff7e34205bffcffe138cb166f448aa/log4j-jcl-2.11.1.jar">
+	<classpathentry sourcepath="/home/piegames/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-slf4j-impl/2.11.1/2b387980561fb77b2aafdcf0d61552e0fa74928a/log4j-slf4j-impl-2.11.1-sources.jar" kind="lib" path="/home/piegames/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-slf4j-impl/2.11.1/4b41b53a3a2d299ce381a69d165381ca19f62912/log4j-slf4j-impl-2.11.1.jar">
 		<attributes>
 			<attribute name="gradle_used_by_scope" value="main,test"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry sourcepath="/home/piegames/.gradle/caches/modules-2/files-2.1/commons-logging/commons-logging/1.2/ecf26c7507d67782a3bbd148d170b31dfad001aa/commons-logging-1.2-sources.jar" kind="lib" path="/home/piegames/.gradle/caches/modules-2/files-2.1/commons-logging/commons-logging/1.2/4bfc12adfe4842bf07b657f0369c4cb522955686/commons-logging-1.2.jar">
+	<classpathentry sourcepath="/home/piegames/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.7.26/21c84cdf9da108216b5e402611d4af479b60cb8/slf4j-api-1.7.26-sources.jar" kind="lib" path="/home/piegames/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.7.26/77100a62c2e6f04b53977b9f541044d7d722693d/slf4j-api-1.7.26.jar">
 		<attributes>
 			<attribute name="gradle_used_by_scope" value="main,test"/>
 		</attributes>
@@ -40,12 +40,12 @@
 			<attribute name="gradle_used_by_scope" value="main,test"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry sourcepath="/home/piegames/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.8.5/c5b4c491aecb72e7c32a78da0b5c6b9cda8dee0f/gson-2.8.5-sources.jar" kind="lib" path="/home/piegames/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.8.5/f645ed69d595b24d4cf8b3fbb64cc505bede8829/gson-2.8.5.jar">
+	<classpathentry sourcepath="/home/piegames/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-core/2.11.1/23bef4ea0494ba9fb9835df0e3e23c6883d8d545/log4j-core-2.11.1-sources.jar" kind="lib" path="/home/piegames/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-core/2.11.1/592a48674c926b01a9a747c7831bcd82a9e6d6e4/log4j-core-2.11.1.jar">
 		<attributes>
 			<attribute name="gradle_used_by_scope" value="main,test"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry sourcepath="/home/piegames/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-core/2.11.1/23bef4ea0494ba9fb9835df0e3e23c6883d8d545/log4j-core-2.11.1-sources.jar" kind="lib" path="/home/piegames/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-core/2.11.1/592a48674c926b01a9a747c7831bcd82a9e6d6e4/log4j-core-2.11.1.jar">
+	<classpathentry sourcepath="/home/piegames/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.8.5/c5b4c491aecb72e7c32a78da0b5c6b9cda8dee0f/gson-2.8.5-sources.jar" kind="lib" path="/home/piegames/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.8.5/f645ed69d595b24d4cf8b3fbb64cc505bede8829/gson-2.8.5.jar">
 		<attributes>
 			<attribute name="gradle_used_by_scope" value="main,test"/>
 		</attributes>

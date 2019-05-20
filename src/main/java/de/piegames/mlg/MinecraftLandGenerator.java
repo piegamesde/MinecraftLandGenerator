@@ -9,11 +9,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.config.Configurator;
 import org.joml.Vector2i;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.piegames.mlg.MinecraftLandGenerator.AutoSpawnpoints;
 import de.piegames.mlg.MinecraftLandGenerator.ForceloadChunks;
@@ -36,32 +36,33 @@ import picocli.CommandLine.RunAll;
 		description = "Generate Minecraft worlds by tricking the server to do it for you. You need to provide a server jar file for this to work.")
 public class MinecraftLandGenerator implements Runnable {
 
-	private static Log	log			= LogFactory.getLog(MinecraftLandGenerator.class);
+	private static Logger	log			= LoggerFactory.getLogger(MinecraftLandGenerator.class);
 
 	@Option(names = { "-v", "--verbose" }, description = "Be verbose.")
-	private boolean		verbose		= false;
+	private boolean			verbose		= false;
 
 	@Option(names = { "--debug-server" },
 			description = "Print the Minecraft server log to stdout for debugging")
-	private boolean		debugServer	= false;
+	private boolean			debugServer	= false;
 
 	@Option(names = { "-s", "--server" },
 			description = "Name of the Minecraft version to use or path to the server's jar file. Defaults to the latest Minecraft release.")
-	private String		server;
+	private String			server;
 
 	@Option(names = { "-w", "--worldPath" },
 			description = "Path to the world that should be generated. If it does not exist, a new world will be created with default settings.",
 			required = true)
-	private Path		worldPath;
+	private Path			worldPath;
 
 	@Option(names = { "--java-cmd" },
 			description = "Java command to launch the server. Defaults to [java, -jar, server.jar]. Use this to specify JVM options (like more RAM etc.) or to enforce the usage of a specific java version.")
-	private String[]	javaOpts;
+	private String[]		javaOpts;
 
 	@Override
 	public void run() {
-		if (verbose)
+		if (verbose) {
 			Configurator.setRootLevel(Level.DEBUG);
+		}
 	}
 
 	/**
@@ -106,21 +107,21 @@ public class MinecraftLandGenerator implements Runnable {
 					serverJar = Downloader.getMinecraft(parent.server);
 				} catch (IOException e) {
 					if (parent.server == null)
-						log.fatal("Could not download latest Minecraft version", e);
+						log.error("Could not download latest Minecraft version", e);
 					else
-						log.fatal("Could not download Minecraft version " + parent.server, e);
+						log.error("Could not download Minecraft version " + parent.server, e);
 					return;
 				}
 			try {
 				server = new Server(serverJar, parent.javaOpts);
 			} catch (IOException e) {
-				log.fatal("Could not initialize server", e);
+				log.error("Could not initialize server", e);
 				return;
 			}
 			try {
 				world = server.initWorld(parent.worldPath, parent.debugServer);
 			} catch (IOException | InterruptedException e) {
-				log.fatal("Could not initialize world", e);
+				log.error("Could not initialize world", e);
 				return;
 			}
 
