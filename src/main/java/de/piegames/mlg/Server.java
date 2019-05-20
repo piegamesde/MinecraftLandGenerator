@@ -23,10 +23,11 @@ import org.slf4j.LoggerFactory;
  */
 public class Server {
 
-	private static Logger			log	= LoggerFactory.getLogger(Server.class);
+	private static Logger			log		= LoggerFactory.getLogger(Server.class);
 
 	protected Path					serverDir;
 	protected final ProcessBuilder	builder;
+	protected final List<Process>	running	= new ArrayList<>();
 
 	/**
 	 * @param serverFile
@@ -87,21 +88,27 @@ public class Server {
 	 *             if the thread gets interrupted while waiting for the server process to finish. This should never happen.
 	 * @author Corrodias, Morlok8k, piegames
 	 */
-	public void runMinecraft(boolean debugServer) throws IOException, InterruptedException {
+	public void runMinecraft(boolean debugServer) throws IOException {
 		log.info("Starting server");
-		final Process process = builder.start();
+		final Process process;
+		synchronized (running) {
+			running.add(process = builder.start());
+		}
 
 		final BufferedReader pOut = new BufferedReader(new InputStreamReader(process.getInputStream()));
 		for (String line = pOut.readLine(); line != null; line = pOut.readLine()) {
 			if (Thread.interrupted()) {
 				log.warn("Got interrupted by other process, stopping");
-				process.destroy();
 				break;
 			}
 			line = line.trim();
 			if (debugServer)
 				System.out.println(line);
 
+			if (line.contains("Minecraft Crash Report")) {
+				log.error("It seems like the server has crashed, aborting");
+				break;
+			}
 			if (line.contains("Done")) {
 				PrintStream out = new PrintStream(process.getOutputStream());
 
@@ -113,9 +120,36 @@ public class Server {
 				out.flush();
 			}
 		}
+		synchronized (running) {
+			stopProcess(process);
+			running.remove(process);
+		}
+	}
 
-		/* The process should have stopped by now. */
-		int exit = process.waitFor();
+	/** Stop all remaining server processes. Use on a shutdown hook, after {@link #runMinecraft(boolean)} has terminated. */
+	public void stopRemaining() {
+		synchronized (running) {
+			for (Process p : running)
+				stopProcess(p);
+		}
+	}
+
+	private void stopProcess(Process process) {
+		log.debug("Stopping server process");
+		process.destroy();
+		try {
+			log.debug("Waiting for the process to terminate");
+			if (!process.waitFor(60, TimeUnit.SECONDS))
+				throw new InterruptedException();
+		} catch (InterruptedException e) {
+			log.warn("Waited 60s and the server did not respond");
+			process.destroyForcibly();
+			try {
+				process.waitFor();
+			} catch (InterruptedException e1) {
+			}
+		}
+		int exit = process.exitValue();
 		if (exit != 0)
 			log.warn("Process stopped with non-zero exit code (" + exit + ")");
 		else

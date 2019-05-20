@@ -62,6 +62,7 @@ public class MinecraftLandGenerator implements Runnable {
 	public void run() {
 		if (verbose) {
 			Configurator.setRootLevel(Level.DEBUG);
+			log.debug("Debug mode enabled.");
 		}
 	}
 
@@ -125,13 +126,30 @@ public class MinecraftLandGenerator implements Runnable {
 				return;
 			}
 
+			Thread main = Thread.currentThread();
+			Thread hook = new Thread(() -> {
+				log.debug("Start shutdown hook");
+				main.interrupt();
+				server.stopRemaining();
+				try {
+					world.resetChanges();
+				} catch (IOException e) {
+					log.warn("Could not delete backup files (level.dat.bak). Please delete them manually", e);
+				}
+				log.debug("End shutdown hook");
+			});
+			Runtime.getRuntime().addShutdownHook(hook);
 			runGenerate();
+			try {
+				Runtime.getRuntime().removeShutdownHook(hook);
+			} catch (IllegalStateException e) {
+			}
 
 			log.info("Cleaning up temporary files");
 			try {
 				world.resetChanges();
 			} catch (IOException e) {
-				log.warn("Could not delete backup files (nolevel.dat.bak). Please delete them manually", e);
+				log.warn("Could not delete backup files (level.dat.bak). Please delete them manually", e);
 			}
 			log.info("Done.");
 		}
@@ -220,10 +238,12 @@ public class MinecraftLandGenerator implements Runnable {
 		for (int i = 0; i < spawnpoints.size(); i++) {
 			Vector2i spawn = spawnpoints.get(i);
 			try {
+				if (Thread.interrupted())
+					break;
 				log.info("Processing " + (i + 1) + "/" + spawnpoints.size() + ", spawn point " + spawn);
 				world.setSpawn(spawn);
 				server.runMinecraft(debugServer);
-			} catch (IOException | InterruptedException e) {
+			} catch (IOException e) {
 				log.warn("Could not process spawn point " + spawn + " this part of the world won't be generated", e);
 			}
 		}
@@ -247,8 +267,7 @@ public class MinecraftLandGenerator implements Runnable {
 					.flatMap(v -> world.availableChunks(v, dimension)
 							.map(w -> new Vector2i(v.x << 5 | w.x, v.y << 5 | w.y)))
 					.collect(Collectors.toSet()));
-			log.debug(
-					"Removed " + (size - loadedChunks.size()) + " chunks that are already present");
+			log.debug("Removed " + (size - loadedChunks.size()) + " chunks that are already present");
 		}
 		log.info("Generating world");
 		if (loadedChunks.size() < 5000)
@@ -260,9 +279,11 @@ public class MinecraftLandGenerator implements Runnable {
 			List<Vector2i> batch = loadedChunks.subList(i * maxLoaded, Math.min((i + 1) * maxLoaded, loadedChunks.size()));
 			log.info("Generating batch " + (i + 1) + " / " + stepCount + " with " + batch.size() + " chunks");
 			try {
+				if (Thread.interrupted())
+					break;
 				world.setLoadedChunks(batch, dimension);
 				server.runMinecraft(debugServer);
-			} catch (IOException | InterruptedException e) {
+			} catch (IOException e) {
 				log.error("Could not force-load chunks", e);
 			}
 		}

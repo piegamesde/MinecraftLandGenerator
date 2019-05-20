@@ -32,8 +32,10 @@ public class BackupHandler {
 	public BackupHandler(Path file) throws FileAlreadyExistsException {
 		this.file = file;
 		this.backup = file.resolveSibling(file.getFileName().toString() + ".bak");
-		if (Files.exists(backup))
+		if (Files.exists(backup)) {
+			log.error("Found a backup file from previous run. Please restore the backup manually or delete it.");
 			throw new FileAlreadyExistsException(backup.toString());
+		}
 	}
 
 	/**
