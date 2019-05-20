@@ -1,4 +1,4 @@
-# Minecraft Land Generator version 3.0.0
+# Minecraft Land Generator version 3.1.0
 
 [![](https://jitpack.io/v/Minecraft-Technik-Wiki/MinecraftLandGenerator.svg)](https://jitpack.io/#Minecraft-Technik-Wiki/MinecraftLandGenerator)
 
@@ -58,7 +58,7 @@ will tell you more about their specific options. On newer versions, `forceload-c
 If you know JitPack and use gradle:
 
 	dependencies {
-		implementation 'com.github.Minecraft-Technik-Wiki:MinecraftLandGenerator:3.0.0'
+		implementation 'com.github.Minecraft-Technik-Wiki:MinecraftLandGenerator:3.1.0'
 	}
 
 otherwise, grab the latest release [here](https://jitpack.io/#Minecraft-Technik-Wiki/MinecraftLandGenerator).
@@ -68,6 +68,10 @@ The class `MinecraftLandGenerator` contains the command-line functionality, whic
 The class `World` has a few static utility methods too, `generateSpawnpoints` will create a list of spawnpoints exactly covering a specific area and `availableChunks` will list all existing chunks in a world.
 
 ## Changelog
+
+3.1.0
+- Minecraft crashes are recognized.
+- If interrupted, things will be cleaned up before terminating.
 
 3.0.0
 - Major version bump due to backwards-incompatible changes
