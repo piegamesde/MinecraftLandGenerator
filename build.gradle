@@ -25,7 +25,7 @@ dependencies {
 	api 'org.joml:joml-jdk8:1.9.14'
 	api 'info.picocli:picocli:3.7.0'
 	implementation 'com.google.code.gson:gson:2.8.5'
-	implementation 'com.github.piegamesde:nbt:dbe4ea253b'
+	implementation 'com.github.piegamesde:nbt:fd6d00577b1ae1f2c90dc1328fcf2b46c700e67d'
 	implementation 'io.github.soc:directories:11'
 	testCompile 'junit:junit:4.12'
 }

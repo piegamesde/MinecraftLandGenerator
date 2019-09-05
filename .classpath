@@ -50,7 +50,7 @@
 			<attribute name="gradle_used_by_scope" value="main,test"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry sourcepath="/home/piegames/.gradle/caches/modules-2/files-2.1/com.github.piegamesde/nbt/dbe4ea253b/87640d48a6c571a7b408505d366c43a95800bf45/nbt-dbe4ea253b-sources.jar" kind="lib" path="/home/piegames/.gradle/caches/modules-2/files-2.1/com.github.piegamesde/nbt/dbe4ea253b/c84f2c1a5bd6fe00ae6a97469cd80d9ad03570c7/nbt-dbe4ea253b.jar">
+	<classpathentry sourcepath="/home/piegames/.gradle/caches/modules-2/files-2.1/com.github.piegamesde/nbt/fd6d00577b1ae1f2c90dc1328fcf2b46c700e67d/2bf4eede65782ac919101b954b63b470086912bd/nbt-fd6d00577b1ae1f2c90dc1328fcf2b46c700e67d-sources.jar" kind="lib" path="/home/piegames/.gradle/caches/modules-2/files-2.1/com.github.piegamesde/nbt/fd6d00577b1ae1f2c90dc1328fcf2b46c700e67d/2396b9d136b949499a2d85538d3d079dcd0975e5/nbt-fd6d00577b1ae1f2c90dc1328fcf2b46c700e67d.jar">
 		<attributes>
 			<attribute name="gradle_used_by_scope" value="main,test"/>
 		</attributes>

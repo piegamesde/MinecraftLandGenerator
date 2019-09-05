@@ -52,7 +52,7 @@
     <dependency>
       <groupId>com.github.piegamesde</groupId>
       <artifactId>nbt</artifactId>
-      <version>dbe4ea253b</version>
+      <version>fd6d00577b1ae1f2c90dc1328fcf2b46c700e67d</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>

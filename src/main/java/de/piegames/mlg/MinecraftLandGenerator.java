@@ -267,7 +267,7 @@ public class MinecraftLandGenerator implements Runnable {
 					.flatMap(v -> world.availableChunks(v, dimension)
 							.map(w -> new Vector2i(v.x << 5 | w.x, v.y << 5 | w.y)))
 					.collect(Collectors.toSet()));
-			log.debug("Removed " + (size - loadedChunks.size()) + " chunks that are already present");
+			log.debug("Skipped " + (size - loadedChunks.size()) + " chunks that are already present");
 		}
 		log.info("Generating world");
 		if (loadedChunks.size() < 5000)
