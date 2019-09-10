@@ -40,7 +40,7 @@ task createPom {
         project {
             groupId 'de.piegames'
             artifactId 'mlg'
-            version '${version}'
+            version "${version}"
 
             licenses {
                 license {

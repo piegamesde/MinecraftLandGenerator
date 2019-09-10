@@ -72,6 +72,7 @@ The class `World` has a few static utility methods too, `generateSpawnpoints` wi
 3.1.1
 - Changed JOML dependency
 - Removed the Eclipse project information. If you use eclipse, generate it using `./gradlew eclipse`. You can then import your project as usual.
+- Fixed pom.xml version information
 
 3.1.0
 - Minecraft crashes are recognized.
