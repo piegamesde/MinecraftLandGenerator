@@ -3,3 +3,9 @@ target/
 build/
 bin/
 .gradletasknamecache
+
+.settings/
+
+.project
+
+.classpath
