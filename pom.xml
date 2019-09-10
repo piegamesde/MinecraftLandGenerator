@@ -21,7 +21,7 @@
     </dependency>
     <dependency>
       <groupId>org.joml</groupId>
-      <artifactId>joml-jdk8</artifactId>
+      <artifactId>joml</artifactId>
       <version>1.9.14</version>
       <scope>compile</scope>
     </dependency>

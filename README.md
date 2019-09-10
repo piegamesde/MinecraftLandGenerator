@@ -58,7 +58,7 @@ will tell you more about their specific options. On newer versions, `forceload-c
 If you know JitPack and use gradle:
 
 	dependencies {
-		implementation 'com.github.Minecraft-Technik-Wiki:MinecraftLandGenerator:3.1.0'
+		implementation 'com.github.Minecraft-Technik-Wiki:MinecraftLandGenerator:3.1.1'
 	}
 
 otherwise, grab the latest release [here](https://jitpack.io/#Minecraft-Technik-Wiki/MinecraftLandGenerator).
@@ -68,6 +68,10 @@ The class `MinecraftLandGenerator` contains the command-line functionality, whic
 The class `World` has a few static utility methods too, `generateSpawnpoints` will create a list of spawnpoints exactly covering a specific area and `availableChunks` will list all existing chunks in a world.
 
 ## Changelog
+
+3.1.1
+- Changed JOML dependency
+- Removed the Eclipse project information. If you use eclipse, generate it using `./gradlew eclipse`. You can then import your project as usual.
 
 3.1.0
 - Minecraft crashes are recognized.
