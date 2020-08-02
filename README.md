@@ -1,8 +1,8 @@
-# Minecraft Land Generator version 3.1.0
+# Minecraft Land Generator version 3.1.2
 
 [![](https://jitpack.io/v/Minecraft-Technik-Wiki/MinecraftLandGenerator.svg)](https://jitpack.io/#Minecraft-Technik-Wiki/MinecraftLandGenerator)
 
-Updated May 2019
+Updated August 2020
 
 ## Credits
 

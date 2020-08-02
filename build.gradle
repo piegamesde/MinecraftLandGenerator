@@ -2,14 +2,15 @@ plugins {
 	id 'java-library'
 	id 'maven'
 	id 'application'
-	id "com.github.johnrengelman.shadow" version "5.0.0"
+	id "com.github.johnrengelman.shadow" version "6.0.0"
+	id "com.github.ben-manes.versions" version "0.29.0"
 	id 'eclipse'
 	id 'idea'
 }
 
 mainClassName = "de.piegames.mlg.MinecraftLandGenerator"
 group = 'de.piegames'
-version = '3.1.1'
+version = '3.1.2'
 sourceCompatibility = '1.8'
 
 repositories {
@@ -19,15 +20,15 @@ repositories {
 
 dependencies {
 	api 'org.slf4j:slf4j-api:1.7.26'
-	implementation 'org.apache.logging.log4j:log4j-core:2.11.1'
-	implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.11.1'
+	implementation 'org.apache.logging.log4j:log4j-core:2.13.3'
+	implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.13.3'
 
-	api 'org.joml:joml:1.9.14'
-	api 'info.picocli:picocli:3.7.0'
-	implementation 'com.google.code.gson:gson:2.8.5'
-	implementation 'com.github.piegamesde:nbt:fd6d00577b1ae1f2c90dc1328fcf2b46c700e67d'
-	implementation 'io.github.soc:directories:11'
-	testCompile 'junit:junit:4.12'
+	api 'org.joml:joml:1.9.25'
+	api 'info.picocli:picocli:4.5.0'
+	implementation 'com.google.code.gson:gson:2.8.6'
+	implementation 'com.github.piegamesde:nbt:3.0.1'
+	implementation 'io.github.soc:directories:12'
+	testCompile 'junit:junit:4.13'
 }
 
 task release(type: GradleBuild) {
