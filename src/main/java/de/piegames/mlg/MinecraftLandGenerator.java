@@ -294,6 +294,7 @@ public class MinecraftLandGenerator implements Runnable {
 		System.setProperty("joml.format", "false");
 
 		CommandLine cli = new CommandLine(new MinecraftLandGenerator());
+		cli.setUnmatchedOptionsArePositionalParams(true);
 		cli.registerConverter(Vector2i.class, new ITypeConverter<Vector2i>() {
 
 			@Override
